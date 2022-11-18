@@ -1,6 +1,6 @@
 # Monty Project - Stacks, Queues - LIFO, FIFO
-[![Monty.jpg](https://i.postimg.cc/8k2fPW5h/Monty.jpg)](https://postimg.cc/7bNZK5S6)
-
+  "Good Luck!" ~ Monty
+[![Monty.jpg](https://i.postimg.cc/R0xgc2hK/Monty.jpg)](https://postimg.cc/fV57s2xR)
 
 ## Description :teacher:
 
