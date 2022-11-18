@@ -1,5 +1,5 @@
 # Monty Project - Stacks, Queues - LIFO, FIFO
-![MONTY](https://www.icloud.com/photos/#0c6qURnKXgC7Y9UyX1f5W09HA)
+[![Monty.jpg](https://i.postimg.cc/8k2fPW5h/Monty.jpg)](https://postimg.cc/7bNZK5S6)
 
 
 ## Description :teacher:
