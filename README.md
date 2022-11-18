@@ -58,6 +58,8 @@ StackOverflow  |  (https://stackoverflow.com/questions/1433204/how-do-i-use-exte
 
 Google  |  (https://www.google.com/webhp?q=stack%20and%20queue)
 
+DataFlair  |  (https://data-flair.training/blogs/stacks-and-queues-in-c/)
+
 
 ### Author :memo::pencil:
  
