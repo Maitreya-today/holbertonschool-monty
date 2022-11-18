@@ -1,61 +1,62 @@
 # Monty Project - Stacks, Queues - LIFO, FIFO
-  "Good Luck!" ~ Monty
+  
 [![Monty.jpg](https://i.postimg.cc/R0xgc2hK/Monty.jpg)](https://postimg.cc/fV57s2xR)
+	"Good Luck!" ~ Monty
 
 ## Description :teacher:
 
-1. What is a hash function
-2. What makes a good hash function
-3. What is a hash table, how do they work and how to use them
-4. What is a collision and what are the main ways of dealing with collisions in the context of a hash table
-5. What are the advantages and drawbacks of using hash tables
-6. What are the most common use cases of hash tables
+* What do LIFO and FIFO mean
+* What is a stack, and when to use it
+* What is a queue, and when to use it
+* What are the common implementations of stacks and queues
+* What are the most common use cases of stacks and queues
+* What is the proper way to use global variables
 
 ## Data Structures :dna:
 
 ```
 /**
- * struct hash_node_s - Node of a hash table
+ * struct stack_s - doubly linked list representation of a stack (or queue)
+ * @n: integer
+ * @prev: points to the previous element of the stack (or queue)
+ * @next: points to the next element of the stack (or queue)
  *
- * @key: The key, string
- * The key is unique in the HashTable
- * @value: The value corresponding to a key
- * @next: A pointer to the next node of the List
+ * Description: doubly linked list node structure
+ * for stack, queues, LIFO, FIFO
  */
-typedef struct hash_node_s
+typedef struct stack_s
 {
-     char *key;
-     char *value;
-     struct hash_node_s *next;
-} hash_node_t;
-
+        int n;
+        struct stack_s *prev;
+        struct stack_s *next;
+} stack_t;
 /**
- * struct hash_table_s - Hash table data structure
+ * struct instruction_s - opcode and its function
+ * @opcode: the opcode
+ * @f: function to handle the opcode
  *
- * @size: The size of the array
- * @array: An array of size @size
- * Each cell of this array is a pointer to the first node of a linked list,
- * because we want our HashTable to use a Chaining collision handling
+ * Description: opcode and its function
+ * for stack, queues, LIFO, FIFO
  */
-typedef struct hash_table_s
+typedef struct instruction_s
 {
-     unsigned long int size;
-     hash_node_t **array;
-} hash_table_t;
+        char *opcode;
+        void (*f)(stack_t **stack, unsigned int line_number);
+} instruction_t;
 ```
 
-### Compilation :wrench:
+## Compilation :wrench:
 ```
-gcc -Wall -pedantic -Werror -Wextra -std=gnu89
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o monty
 ```
 
 ## Resources  :technologist:
 
-YouTube  |  (https://www.youtube.com/watch?v=MfhjkfocRR0)
+YouTube  |  (https://www.youtube.com/watch?v=wjI1WNcIntg)
 
-Wiki  |  (https://en.wikipedia.org/wiki/Hash_function)
+StackOverflow  |  (https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files)
 
-Wiki  |  (https://en.wikipedia.org/wiki/Hash_table)
+Google  |  (https://www.google.com/webhp?q=stack%20and%20queue)
 
 
 ### Author :memo::pencil:
