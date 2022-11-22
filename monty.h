@@ -1,15 +1,13 @@
-#ifndef _MONTY_
-#define _MONTY_
-
-/*Libraries*/
-#include <ctype.h>
+#ifndef FUNCS
+#define FUNCS
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stddef.h>
-
-/*Structure Data*/
-/*-Stack Structure Data*/
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -26,7 +24,6 @@ typedef struct stack_s
 	struct stack_s *next;
 } stack_t;
 
-/*-Instruction Structure Data*/
 /**
  * struct instruction_s - opcode and its function
  * @opcode: the opcode
@@ -40,34 +37,30 @@ typedef struct instruction_s
 	char *opcode;
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
+/*0-push_pall.c*/
+void  process_file(FILE *file);
+instruction_t search_opcode(char *opcode);
+char **token_line(char *line);
+int get_num_words(char *line);
+int validate_spaces(char *input);
+/*free.c*/
+void free_nodes(stack_t *head);
+/*functions to execute the opcode*/
+stack_t *add_node(stack_t **head, const int n);
+size_t print_list(stack_t *h);
+int pop(stack_t **head);
+int delete(stack_t **head, unsigned int index);
+int swap_first_ones(stack_t **h);
+int sum_first_ones(stack_t **h);
+/*monty_list1.c - opcode functions*/
+void monty_push(stack_t **stack, char *value, unsigned int line_number);
+void monty_pall(stack_t **stack, unsigned int line_number);
+/*monty_list2.c - opcode functions*/
+void monty_pint(stack_t **stack, unsigned int line_number);
+void monty_pop(stack_t **stack, unsigned int line_number);
+void monty_swap(stack_t **stack, unsigned int line_number);
+void monty_add(stack_t **stack, unsigned int line_number);
+void monty_nop(stack_t **stack, unsigned int line_number);
 
-/*-Global Variable Structure Data*/
-/**
- * struct GlobVar - Holds the input FILEstream and buffer.
- * @InputF: FILEstream's input.
- * @TMP: buffer to save line input.
- * @Mode: switches between queue and stack modes.
- */
-struct GlobVar
-{
-	FILE *InputF;
-	char *TMP;
-	int Mode;
-};
-
-extern struct GlobVar GV;
-
-/*Prototypes*/
-
-/*-Monty_Main-*/
-int MOpenFile(char *FileName, stack_t **stack);
-void MParseCMD(stack_t **stack, char *OP, unsigned int LineNum);
-
-/*-pushpall-*/
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-
-/*-MFreeList-*/
-void freelist(stack_t *MHead);
-
+int is_integer(char *buf);
 #endif

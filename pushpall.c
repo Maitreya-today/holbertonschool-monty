@@ -1,70 +1,137 @@
 #include "monty.h"
-
 /**
- * push - adds a new element to the stack.
- * @stack: doubly linked list que nos pasan.
- * @line_number: El valor que va dentro del node.
- *
- * Return: el nuevo node que creamos (new_head).
- **/
-void push(stack_t **stack, unsigned int line_number)
+ * process_file - function that read file line by line.
+ * @file : file to read
+ * Return: nothing;
+ */
+void  process_file(FILE *file)
 {
-	stack_t *MNewHead;
-	char *OP;
-	char *EndPTR;
-	int NUM;
+	char *line = NULL;
+	ssize_t read;
+	size_t len = 0, j = 1;
+	char **argl;
+	stack_t *stack = NULL;
+	instruction_t operation_opcode;
 
-	MNewHead = malloc(sizeof(stack_t));
-	if (MNewHead == NULL)
+	while ((read = getline(&line, &len, file)) != -1)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
-		freelist(MNewHead);
-		freelist(*stack);
-		exit(EXIT_FAILURE);
+		if (validate_spaces(line))
+		{
+			j++;
+			continue;
+		}
+		argl = token_line(line);
+
+		if (!strcmp(argl[0], "push"))
+			monty_push(&stack, argl[1], j);
+		else
+		{
+			operation_opcode = search_opcode(argl[0]);
+			if (operation_opcode.f != NULL)
+			{
+				operation_opcode.f(&stack, j);
+			}
+			else
+			{
+				fprintf(stderr, "L%ld: unknown instruction %s\n", j, argl[0]);
+				exit(EXIT_FAILURE);
+			}
+		}
+		free(argl);
+		j++;
 	}
-
-	OP = strtok(NULL, " \n$");
-
-	if (OP != NULL)
-	{
-		NUM = strtol(OP, &EndPTR, 10);
-	}
-
-	MNewHead->n = NUM;
-	MNewHead->prev = NULL;
-
-	if (isdigit(MNewHead->n))
-	{
-		fprintf(stdout, "L%i: usage: push integer\n", line_number);
-		exit(EXIT_FAILURE);
-	}
-
-	MNewHead->next = *stack;
-
-	*stack = MNewHead;
+	free(line);
+	free_nodes(stack);
 }
-
 /**
- * pall - prints all elements of the stack
- * @stack: stack that needs to be printed
- * @line_number: unused variable.
- *
- **/
-void pall(stack_t **stack, unsigned int line_number)
+ * search_opcode - function that pushes an element to stack
+ * @opcode : look the opcode to run
+ * Return: a instruction_t structure
+ */
+instruction_t search_opcode(char *opcode)
 {
-	stack_t *Element;
-	(void)line_number;
+	int i = 0;
 
-	if (*stack == NULL)
+	instruction_t option[] = {
+		{"pall", monty_pall},
+		{"pint", monty_pint},
+		{"pop", monty_pop},
+		{"swap", monty_swap},
+		{"add", monty_add},
+		{"nop", monty_nop},
+		{NULL, NULL}
+	};
+
+	for (i = 0; option[i].f != NULL; i++)
 	{
-		return;
+		if (strcmp(option[i].opcode, opcode) == 0)
+		{
+			return (option[i]);
+		}
 	}
 
-	Element = *stack;
+	return (option[i]);
+}
+/**
+ * token_line - function that split the line.
+ * @line : The pointer to bytecode line.
+ * Return: The pointer to tokens.
+ */
+char **token_line(char *line)
+{
+	char *token = NULL;
+	char **arg_tok = NULL;
+	int i;
 
-	while (Element != NULL)
+	arg_tok = malloc((get_num_words(line) + 2) * sizeof(char *));
+	if (!arg_tok)
 	{
-		fprintf(stdout, "%i\n", Element->n);
-		Element = Element->next;
+		fprintf(stderr, "Error: malloc failed");
+		exit(EXIT_FAILURE);
 	}
+	token = strtok(line, " ");
+	i = 0;
+	while (token)
+	{
+		arg_tok[i] = token;
+		token = strtok(NULL, " ");
+		i++;
+	}
+	arg_tok[i - 1][strlen(arg_tok[i - 1]) - 1] = '\0';
+	return (arg_tok);
+}
+/**
+ * get_num_words - function get number of words in a line.
+ * @line : string.
+ * Return: number of words.
+ */
+int get_num_words(char *line)
+{
+	int i = 0, n = 1;
+
+	while (line[i])
+	{
+		if (line[i] == ' ')
+			n++;
+		i++;
+	}
+	return (n);
+}
+/**
+ * validate_spaces - Validate spaces, tabs and line breaks
+ * @input: string from input
+ * Return: 1 if only find spaces, tabs or line break
+ */
+int validate_spaces(char *input)
+{
+	int i = 0, flag = 1, len = 0;
+
+	len = strlen(input);
+
+	while (input[i] == ' ' || input[i] == '\n' || input[i] == '\t')
+		i++;
+
+	if (i != len)
+		flag = 0;
+	return (flag);
 }
